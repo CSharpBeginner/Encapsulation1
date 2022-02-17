@@ -1,8 +1,8 @@
 public class Weapon
 {
-    private int _damage;
+    private readonly int _damage;
+    private readonly int _bulletsPerShoot;
     private int _bullets;
-    private int _bulletsPerShoot;
 
     public Weapon(int damage, int bullets, int bulletsPerShoot)
     {
@@ -22,11 +22,11 @@ public class Weapon
         }
 
         _damage = damage;
-        _bullets = bullets;
         _bulletsPerShoot = bulletsPerShoot;
+        _bullets = bullets;
     }
 
-    public void TryFire(Player player)
+    public bool TryFire(Player player)
     {
         if (player == null)
         {
@@ -36,7 +36,10 @@ public class Weapon
         if (_bullets >= _bulletsPerShoot)
         {
             Fire(Player player);
+            return true;
         }
+
+        return false;
     }
 
     private void Fire(Player player)
@@ -80,20 +83,20 @@ public class Player
 
 public class Bot
 {
-    private Weapon _weapon;
+    private readonly Weapon _weapon;
 
     public Bot(Weapon weapon)
-    {
-        _weapon = weapon;
-    }
-
-    public void OnSeePlayer(Player player)
     {
         if (_weapon == null)
         {
             throw new ArgumentNullException(nameof(_weapon));
         }
 
+        _weapon = weapon;
+    }
+
+    public void OnSeePlayer(Player player)
+    {
         _weapon.TryFire(player);
     }
 }
