@@ -44,6 +44,16 @@ public class Weapon
 
     private void Fire(Player player)
     {
+        if (player == null)
+        {
+            throw new ArgumentNullException(nameof(player));
+        }
+
+        if (_bullets < _bulletsPerShoot)
+        {
+            throw new InvalidOperationException();
+        }
+
         player.TakeDamage(_damage);
         _bullets -= _bulletsPerShoot;
     }
